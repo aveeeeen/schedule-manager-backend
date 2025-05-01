@@ -11,6 +11,9 @@ const router = express.Router();
 const ai = new GoogleGenAI({ apiKey: GENAI_KEY });
 
 const whitelist = ["http://localhost:3000", "http://localhost:5173"];
+
+whitelist.push(process.env.FRONTEND_URL);
+
 const corsOptions = {
   origin: whitelist,
 }
