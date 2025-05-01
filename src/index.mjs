@@ -15,8 +15,19 @@ const whitelist = ["http://localhost:3000", "http://localhost:5173"];
 whitelist.push(process.env.FRONTEND_URL);
 
 const corsOptions = {
-  origin: whitelist,
-}
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      // !originはサーバーtoサーバー通信などを許可する場合
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, //レスポンスヘッダーにAccess-Control-Allow-Credentials追加
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
 app.use(cors(corsOptions));
 
 let counter = 0;
